@@ -547,7 +547,8 @@ BaseTreinamento = [
 ('aquele que nunca viu a tristeza nunca reconhecerá a alegria','tristeza'),
 ('cuidado com a tristeza ela e um vicio','tristeza')]
 
-BaseTeste =[('não precisei pagar o ingresso', 'alegria'),
+BaseTeste =[
+            ('não precisei pagar o ingresso', 'alegria'),
             ('se eu ajeitar tudo fica bem','alegria'),
             ('minha fortuna ultrapassa a sua','alegria'),
             ('sou muito afortunado','alegria'),
@@ -782,14 +783,6 @@ BaseTeste =[('não precisei pagar o ingresso', 'alegria'),
             ('não magoe as pessoas','tristeza')]
 
 stopwordsnltk = nltk.corpus.stopwords.words('portuguese')
-#print(stopwordsnltk)
-
-#def removestp(texto):
-#    frases=[]
-#    for(palavras, emocao) in texto:
-#        semstop= [p for p in palavras.split() if p not in stopwordsnltk]
-#        frases.append((semstop, emocao))
-#    return frases
 
 #Variável Ctrl recebe a decisão do usuário de continuar no programa ao final de um loop completo.
 Ctrl='n'
@@ -839,7 +832,9 @@ while Ctrl!='s':
     Classifier = nltk.NaiveBayesClassifier.train(BaseCompletaTrain)
     Labels = Classifier.labels()
     #print(Classifier.show_most_informative_features(5))
-    #.accuracy :Verifica qual o percentual de acerto para o nosso algoritmo
+
+    
+    #Construindo a Matrix de Confusão
     def MatrizConfusao(base):
         Esperado = []
         Previsto=[]
@@ -850,6 +845,7 @@ while Ctrl!='s':
         MatrixConfus = ConfusionMatrix(Esperado,Previsto)
         return MatrixConfus
 
+    #.accuracy :Verifica qual o percentual de acerto para o nosso algoritmo
     print('\n% de acerto do Algoritmo: {:3.4f}\n'.format(nltk.classify.accuracy(Classifier,BaseCompletaTest)))
 
     QuestMatriz =input('Verificar Matriz Confusão? s/n \n ')
@@ -857,7 +853,6 @@ while Ctrl!='s':
         QuestMatriz = input('Favor responder usando s ou n. \n Verificar Matriz Confusão? s/n \n ')
     if  QuestMatriz=='s':
         print(MatrizConfusao(BaseCompletaTest))
-    #Construindo a Matrix de Confusão
 
 
     def TratarFrase(texto):
@@ -877,8 +872,6 @@ while Ctrl!='s':
     distr = Classifier.prob_classify(novo)
     for classe in distr.samples():
         print('{}:{:3.2f}'.format(classe, distr.prob(classe)))
-
-
 
     EmotionClassific = 0
     StatusClassific = input('\nA emoção está correta? s/n\n')
@@ -902,6 +895,7 @@ while Ctrl!='s':
                 break
             ind+=1
         BaseTreinamento.append(NovaEntrada)
+        #Imprimi as ultimas três frases do arquivo para verificar se a nova frase foi adicionada com sucesso.    
         print(BaseTreinamento[-3:])
 
     Ctrl = input('\nDeseja Sair? s/n\n')
